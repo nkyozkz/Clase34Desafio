@@ -137,8 +137,8 @@ const initializePassport = () => {
             return done(null, false);
           }
           if (
-            userNew.email.includes(`_admin`) &&
-            userNew.password == "AdminPass88729"
+            userNew.email.includes(process.env.ADMIN_EMAIL_INCLUDES) &&
+            userNew.password == process.env.ADMIN_PASSWORD_INCLUDES
           ) {
             let asignarRol = {
               ...userNew,

@@ -46,7 +46,18 @@ export class ProductsController {
   deleteProducts = async (req) => {
     let idEliminar = req.params.pid;
     if (mongoose.Types.ObjectId.isValid(idEliminar)) {
-      return this.productsServices.deleteProducts(idEliminar);
+      if (req.role == "admin") {
+        return await this.productsServices.deleteProducts(idEliminar);
+      }
+      let producto = await this.productsServices.getProductsWithId(idEliminar);
+      if(producto.response[0].owner==req.owner){
+        return await this.productsServices.deleteProducts(idEliminar);
+      }else{
+        return {
+          status: 400,
+          response: "No puedes eliminar un producto que no es tuyo",
+        };
+      }
     } else {
       return {
         status: 400,

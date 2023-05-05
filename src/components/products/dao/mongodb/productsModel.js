@@ -148,6 +148,7 @@ export class ProductsModel {
   };
   addProduct = async (req) => {
     let nuevoProducto = req.body;
+    nuevoProducto.owner = req.owner || "admin";
     let verificacionDeCode = await this.db.find({
       code: nuevoProducto.code,
     });

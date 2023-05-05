@@ -6,6 +6,7 @@ import sessionRouter from "../components/users/routes.js";
 import ticketRouter from "../components/ticket/routes.js";
 import mockingProducts from "../components/mock/routes.js";
 import loggerTest from "../components/log/routes.js";
+import premium from "../components/premium/routes.js";
 import handlebarsRouter from "../client/handlebarRoutes.js";
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.use("/", handlebarsRouter);
 router.use("/loggerTest", loggerTest);
 router.use("/mockingproducts", mockingProducts);
+router.use("/api/users/premium", premium);
 router.use("/api/ticket", ticketRouter);
 router.use("/api/sessions", sessionRouter);
 router.use("/api/carts", cartsRouter);

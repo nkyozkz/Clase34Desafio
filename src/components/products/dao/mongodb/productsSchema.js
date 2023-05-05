@@ -8,5 +8,6 @@ export const productsSchema = new mongoose.Schema({
   status: Boolean,
   stock: Number,
   thumbnail: String,
+  owner: String,
 });
 productsSchema.plugin(mongoosePaginate);

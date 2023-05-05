@@ -2,6 +2,8 @@ import { CartService } from "./cartServices.js";
 import {
   confirmarCarrito,
   confirmarProducto,
+  getOwnerCart,
+  getOwnerProduct,
 } from "../../scripts/confirmacionExistencia.js";
 
 import mongoose from "mongoose";
@@ -43,7 +45,12 @@ export class CartController {
     let verificarProducto = await confirmarProducto(productoId);
     let verificarCarrito = await confirmarCarrito(carritoId);
     if (verificarCarrito && verificarProducto) {
-      return this.cartService.addProduct(productoId, carritoId);
+      let cartOwner = await getOwnerCart(carritoId);
+      let productOwner = await getOwnerProduct(productoId);
+      console.log(cartOwner);
+      console.log(productOwner);
+
+      // return this.cartService.addProduct(productoId, carritoId);
     } else {
       return {
         status: 400,
@@ -137,7 +144,7 @@ export class CartController {
     }
   };
 
-  buyProducts=async(user)=>{
+  buyProducts = async (user) => {
     return this.cartService.buyProducts(user);
-  }
+  };
 }

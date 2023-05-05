@@ -6,6 +6,9 @@ dotenv.config();
 export const generateToken = (user) => {
   return jwt.sign({ user }, process.env.JWT_PRIVATE_KEY, { expiresIn: "24h" });
 };
+export const generatePasswordToken = (email) => {
+  return jwt.sign({ email }, process.env.JWT_PASSWORD_KEY, { expiresIn: "1h" });
+};
 
 export const authToken = (req, res, next) => {
   const authToken = req.headers.token;
@@ -27,6 +30,40 @@ export const authToken = (req, res, next) => {
   });
 };
 
+export const authPasswordToken = async (req, res, next) => {
+  let { token } = req.params;
+  let email;
+  const authToken = token;
+  if (!authToken)
+    return res.status(401).send({
+      status: 401,
+      response: "Token not received",
+    });
+  try {
+    const credentials = await new Promise((resolve, reject) => {
+      jwt.verify(authToken, process.env.JWT_PASSWORD_KEY, (error, decoded) => {
+        if (error) reject(error);
+        else resolve(decoded);
+      });
+    });
+    email = {
+      status: 200,
+      response: credentials.email,
+    };
+  } catch (error) {
+    email = {
+      status: 403,
+      response: "Not authorized",
+    };
+  }
+  if (email.status == 403) {
+    return res.status(email.status).send(email.response);
+  } else {
+    req.user = email;
+    next();
+  }
+};
+
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, (err, user, info) => {
@@ -45,31 +82,31 @@ export const passportCall = (strategy) => {
 export const extractCookie = (req) =>
   req && req.cookies ? req.cookies[process.env.COOKIE_NAME_JWT] : null;
 
-export const authorization = (rol) => {
+export const authorization = (...roles) => {
   return async (req, res, next) => {
     let token = req.headers.token;
-    
-      fetch("http://localhost:8080/api/sessions/current", {
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if(data.status==200&&data.response.rol==rol){
-            next()
-          }else if(data.status==200&&data.response.rol!==rol){
-            return res.status(401).send({
-              status:401,
-              response:`No autorizado: Solo los ${rol} pueden acceder a este contenido, tu rol es ${data.response.rol}`
-            })
-          }else{
-            return res.status(401).send({
-              status:401,
-              response:"Token invalido o inexistente"
-            })
+    fetch("http://localhost:8080/api/sessions/current", {
+      headers: {
+        "Content-Type": "application/json",
+        token: token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status == 200 && roles.includes(data.response.rol)) {
+          if (data.response.rol == "premium") {
+            req.owner = data.response.email;
           }
-        });
+          req.role = data.response.rol;
+          next();
+        } else {
+          return res.status(401).send({
+            status: 401,
+            response: `No autorizado: Solo los ${roles.join(
+              " o "
+            )} pueden acceder a este contenido, tu rol es ${data.response.rol}`,
+          });
+        }
+      });
   };
 };

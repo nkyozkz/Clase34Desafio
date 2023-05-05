@@ -2,6 +2,7 @@ import { Router } from "express";
 import { CartController } from "./cartController.js";
 import { authToken } from "../../middlewares/authMiddlewares.js";
 import { PurchaseDTO } from "./purchaseDTO/purchaseDTO.js";
+
 const router = Router();
 let controller = new CartController();
 //* Listar todos los carritos

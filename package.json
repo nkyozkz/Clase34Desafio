@@ -1,5 +1,5 @@
 {
-  "name": "clase32desafio",
+  "name": "clase34desafio",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -7,17 +7,8 @@
     "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nkyozkz/Clase32Desafio.git"
-  },
   "author": "Nkyozkz",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/nkyozkz/Clase32Desafio/issues"
-  },
-  "homepage": "https://github.com/nkyozkz/Clase32Desafio#readme",
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "connect-mongo": "^5.0.0",
@@ -39,10 +30,19 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "socket.io": "^4.6.1",
-    "sweetalert2": "^11.7.3",
+    "sweetalert2": "^11.7.5",
     "winston": "^3.8.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nkyozkz/Clase34Desafio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nkyozkz/Clase34Desafio/issues"
+  },
+  "homepage": "https://github.com/nkyozkz/Clase34Desafio#readme",
+  "description": ""
 }
